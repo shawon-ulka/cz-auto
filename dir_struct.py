@@ -1,4 +1,4 @@
-import os, argparse
+import os, argparse, shutil
 
 parser = argparse.ArgumentParser()
 
@@ -13,6 +13,39 @@ with open(config_file,'r') as file:
 
 dirdic={}
 for line in config_info:
-    print(line)
-    print(line.lower())
+    if "libid" in line.lower().strip():
+        libid=line.split('=')[1].strip()
+        dirdic['libid']=libid
 
+    if "tech" in line.lower().strip():
+        tech=line.split('=')[1].strip()
+        node=tech[:2]
+        dirdic['tech']=tech
+        dirdic['node']=node+'nm'
+
+    if "corner" in line.lower().strip():
+        corner=line.split('=')[1].strip()
+        dirdic['corner']=corner
+
+
+
+dirpath=f"{dirdic['node']}/{dirdic['tech']}/{dirdic['libid']}/{dirdic['corner']}"
+
+
+if not os.path.exists(dirpath):
+    os.makedirs(dirpath)
+
+
+pwd=os.getcwd().replace('\\','/')
+
+
+
+config_dest=dirpath+'/Config'
+config_source=pwd+'/cz_auto_std/Config/'+dirdic['tech']
+
+print(config_source)
+
+if os.path.isdir(config_source):
+    if os.path.exists(config_dest):
+        shutil.rmtree(config_dest)
+    shutil.copytree(config_source, config_dest)
