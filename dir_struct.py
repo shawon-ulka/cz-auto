@@ -8,7 +8,11 @@ args=parser.parse_args()
 config_file=args.cfg_file
 
 with open(config_file,'r') as file:
-    config_info=file.read()
+    config_info=file.readlines()
 
 
-print(config_info)
+dirdic={}
+for line in config_info:
+    print(line)
+    print(line.lower())
+
