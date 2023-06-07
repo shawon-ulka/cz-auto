@@ -1,4 +1,4 @@
-import os, argparse, shutil
+import os, argparse, shutil, subprocess, time
 
 parser = argparse.ArgumentParser()
 
@@ -40,8 +40,12 @@ pwd=os.getcwd().replace('\\','/')
 
 
 
-config_dest=dirpath+'/Config'
-config_source=pwd+'/cz_auto_std/Config/'+dirdic['tech']
+# config_dest=dirpath+'/Config'
+# config_source=pwd+'/cz_auto_std/Config/'+dirdic['tech']
+
+
+config_dest=dirpath
+config_source=pwd+'/cz_auto_std'
 
 print(config_source)
 
@@ -49,3 +53,9 @@ if os.path.isdir(config_source):
     if os.path.exists(config_dest):
         shutil.rmtree(config_dest)
     shutil.copytree(config_source, config_dest)
+
+
+lsf_command='bsub -q ulkasemiq ./run_flow' 
+command="cd "+dirpath+";chmod -R 777 ./;"+lsf_command
+time.sleep(5)
+subprocess.call(command, shell=True)
